@@ -51,9 +51,9 @@ router.post('/sign in', authMiddleware, async (req, res, next) => {
     const account = await prisma.accounts.findFirst({ where: { ID } });
 
     if (!account)
-        return res.status(401).json({ message: '존재하지 않는 계정입니다' });
+        return res.status(403).json({ message: '존재하지 않는 계정입니다' });
     else if (!(await bcrypt.compare(PW, account.PW)))
-        return res.status(401).json({ message: '비밀번호가 일치하지 않습니다' })
+        return res.status(403).json({ message: '비밀번호가 일치하지 않습니다' })
 
     const token = jwt.sign({
         UID: UID,
@@ -62,5 +62,5 @@ router.post('/sign in', authMiddleware, async (req, res, next) => {
     );
 
     res.cookie('authorization', `Bearer ${token}`);
-    return res.status(200).json({ message: '로그인 성공' })
+    return res.status(201).json({ message: '로그인 성공' })
 });
