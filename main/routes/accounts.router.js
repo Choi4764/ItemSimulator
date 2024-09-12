@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/sign up', async (req, res, next) => {
     try {
-        const { ID, PW, PW_confirm} = req.body;
+        const { ID, PW, PW_confirm } = req.body;
         const isExistAccount = await prisma.accounts.findFirst({
             where: {
                 ID,
@@ -15,7 +15,7 @@ router.post('/sign up', async (req, res, next) => {
         });
 
         if (isExistAccount) {
-            return res.status(402).json({ message: '존재하는 ID입니다' });
+            return res.status(403).json({ message: '존재하는 ID입니다' });
         }
 
         const idregex = /^[a-z|0-9]+%/;
@@ -51,9 +51,9 @@ router.post('/sign in', authMiddleware, async (req, res, next) => {
     const account = await prisma.accounts.findFirst({ where: { ID } });
 
     if (!account)
-        return res.status(403).json({ message: '존재하지 않는 계정입니다' });
+        return res.status(404).json({ message: '존재하지 않는 계정입니다' });
     else if (!(await bcrypt.compare(PW, account.PW)))
-        return res.status(403).json({ message: '비밀번호가 일치하지 않습니다' })
+        return res.status(402).json({ message: '비밀번호가 일치하지 않습니다' })
 
     const token = jwt.sign({
         UID: UID,

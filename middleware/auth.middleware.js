@@ -34,7 +34,7 @@ export default async function (req, res, next) {
             case 'JsonWebTokenError':
                 return res.status(401).json({message: '토큰이 조작되었습니다'});
                 default:
-                    return res.status(401).json({message: error.message ?? '비정상적인 요청'});
+                    return res.status(400).json({message: error.message ?? '비정상적인 요청'});
         }
     }
 }

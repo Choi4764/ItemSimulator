@@ -13,6 +13,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model accounts{
-  
+model Accounts{
+  UID Int @id @default(autoincrement()) @map('UID')
+  ID String @unique @map('ID')
+  PW String @map('password')
+
+  character Characters[]
+
+  @@map('Accounts')
+}
+
+model Characters{
+  UID Int @map('UID')
+  CharID Int @id @default(autoincrement())
+  CharName String @unique
+  health Int @default(500)
+  power Int @default(100)
+  money Int @default(10000)
+
+  equipment Equipments[]
+  CharItem CharItems[]
+
+  accounts Accounts @relations(fields: [UID], references: [UID])
+
+  @@map('Characters)
+}
+
+model Items{
+  ID Int @id @default(autoincrement())
+  ItemName String @unique
+  Health Int
+  Power Int
+  Price Int
+
+  equipment Equipments[]
+  CharItem CharItems[]
+
+  @@map('Items')
 }

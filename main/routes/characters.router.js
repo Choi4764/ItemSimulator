@@ -10,7 +10,7 @@ router.post('/characters', async (req, res, next) => {
         const { charname, health, power, money } = req.body;
 
         if (isExistCharName) {
-            return res.status(402).json({ message: '존재하는 캐릭터 명입니다' });
+            return res.status(403).json({ message: '존재하는 캐릭터 명입니다' });
         }
 
         const character = await prisma.characters.create({
