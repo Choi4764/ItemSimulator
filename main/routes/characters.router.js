@@ -7,7 +7,13 @@ const router = express.Router();
 router.post('/characters', async (req, res, next) => {
     try {
         const { UID } = req.account;
-        const { charname, health, power, money } = req.body;
+        const { CharName, health, power, money } = req.body;
+
+        const isExistCharName = await prisma.characters.findFirst({
+            where:{
+                CharName,
+            }
+        });
 
         if (isExistCharName) {
             return res.status(403).json({ message: '존재하는 캐릭터 명입니다' });
@@ -16,7 +22,7 @@ router.post('/characters', async (req, res, next) => {
         const character = await prisma.characters.create({
             data: {
                 UID: +UID,
-                charname: charname,
+                CharName: CharName,
                 health: 500,
                 power: 100,
                 money: 10000,
@@ -45,7 +51,7 @@ router.delete('/characters/:CharID', async (req, res, next) => {
                 UID: +UID,
             },
         });
-        return res.status(201).json({ message: '캐릭터 생성 완료' });
+        return res.status(201).json({ message: '캐릭터 삭제 완료' });
     } catch (error) {
         next(error);
     }
