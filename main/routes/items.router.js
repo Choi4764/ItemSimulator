@@ -28,8 +28,28 @@ router.post('/items', async (req, res, next) => {
             },
         });
 
-        return res.status(201).json({ message: '캐릭터 생성 완료' });
+        return res.status(201).json({ message: '아이템 생성 완료' });
     } catch (error) {
         next(error);
     }
 })
+
+router.get('/items', async (req, res, next) => {
+    try {
+        const { ItemID } = req.params;
+
+        const item = await prisma.items.findMany({
+            where: { ItemID: +ItemID },
+            select: {
+                ItemName: true,
+                ItemStat: ItemStat({
+                    health: true,
+                    power: true,
+                }),
+            }
+        });
+        return res.status(201).json({ data: item });
+    }catch(error){
+        next(error);
+    }
+});

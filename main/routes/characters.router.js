@@ -81,7 +81,10 @@ router.get('/characters/:CharID', async (req, res, next) => {
         const { UID } = req.account;
 
         const character = await prisma.character.findFirst({
-            where: { CharID: +CharID },
+            where: { 
+                CharID: +CharID,
+                UID: +UID,
+            },
             select: {
                 charname: true,
                 health: true,
